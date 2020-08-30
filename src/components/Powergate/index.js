@@ -44,33 +44,34 @@ const Powergate = () => {
         // but the default storage config of CLI works with testnet
         await pow.ffs.setDefaultStorageConfig(
           {
-            "Hot": {
-              "Enabled": true,
-              "AllowUnfreeze": false,
-              "Ipfs": {
-                "AddTimeout": 30
+            "hot": {
+              "enabled": true,
+              "allowUnfreeze": false,
+              "ipfs": {
+                "addTimeout": 30
               }
             },
-            "Cold": {
-              "Enabled": true,
-              "Filecoin": {
-                "RepFactor": 1,
-                "DealMinDuration": 518400,
-                "ExcludedMiners": null,
-                "TrustedMiners": null,
-                "CountryCodes": null,
-                "Renew": {
-                  "Enabled": false,
-                  "Threshold": 0
+            "cold": {
+              "enabled": true,
+              "filecoin": {
+                "repFactor": 1,
+                "dealMinDuration": 518400,
+                "excludedMiners": null,
+                "trustedMiners": null,
+                "countryCodes": null,
+                "renew": {
+                  "enabled": false,
+                  "threshold": 0
                 },
-                "Addr": addr,
-                "MaxPrice": 0
+                "addr": addr,
+                "maxPrice": 0
               }
             },
-            "Repairable": false
           }          
         );
 
+        const config = await pow.ffs.defaultStorageConfig();
+        console.log(config);
         // cache data in IPFS in preparation to store it using FFS
         const { cid } = await pow.ffs.stage(buffer);
 
