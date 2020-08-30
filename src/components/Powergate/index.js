@@ -40,10 +40,8 @@ const Powergate = () => {
         // this newly created address can be specified to be the one to use for file upload
         const { addr } = await pow.ffs.newAddr("myNewAddress");
 
-        // cache data in IPFS in preparation to store it using FFS
-        const { cid } = await pow.ffs.stage(buffer);
-
-        // Copied from the CLI... The default config doesn't work for some reason
+        // Copied from the CLI... The default config of the js api doesn't work for some reason
+        // but the default storage config of CLI works with testnet
         await pow.ffs.setDefaultStorageConfig(
           {
             "Hot": {
@@ -72,6 +70,9 @@ const Powergate = () => {
             "Repairable": false
           }          
         );
+
+        // cache data in IPFS in preparation to store it using FFS
+        const { cid } = await pow.ffs.stage(buffer);
 
         // initiates cold storage and deal making
         const { jobId } = await pow.ffs.pushStorageConfig(cid);
