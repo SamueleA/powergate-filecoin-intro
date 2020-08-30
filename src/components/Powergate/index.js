@@ -38,10 +38,40 @@ const Powergate = () => {
 
         // create new address named myNewAddress
         // this newly created address can be specified to be the one to use for file upload
-        // const { addr } = await pow.ffs.newAddr("myNewAddress");
+        const { addr } = await pow.ffs.newAddr("myNewAddress");
 
         // cache data in IPFS in preparation to store it using FFS
         const { cid } = await pow.ffs.stage(buffer);
+
+        // Copied from the CLI... The default config doesn't work for some reason
+        await pow.ffs.setDefaultStorageConfig(
+          {
+            "Hot": {
+              "Enabled": true,
+              "AllowUnfreeze": false,
+              "Ipfs": {
+                "AddTimeout": 30
+              }
+            },
+            "Cold": {
+              "Enabled": true,
+              "Filecoin": {
+                "RepFactor": 1,
+                "DealMinDuration": 518400,
+                "ExcludedMiners": null,
+                "TrustedMiners": null,
+                "CountryCodes": null,
+                "Renew": {
+                  "Enabled": false,
+                  "Threshold": 0
+                },
+                "Addr": addr,
+                "MaxPrice": 0
+              }
+            },
+            "Repairable": false
+          }          
+        );
 
         // initiates cold storage and deal making
         const { jobId } = await pow.ffs.pushStorageConfig(cid);
